@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insertar Nombre aqui</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0f1a 50%, #0a0a0a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            backdrop-filter: blur(10px);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #b8860b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #cccccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #9966cc, #663399);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(153, 102, 204, 0.3);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(153, 102, 204, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #cccccc;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 15px 40px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 50px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .movie-row {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #9966cc transparent;
+        }
+
+        .movie-row::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .movie-row::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .movie-row::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #9966cc, #d4af37);
+            border-radius: 10px;
+        }
+
+        .movie-card {
+            min-width: 280px;
+            height: 160px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #2d1b3d, #1a0f1a);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            border-color: #d4af37;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .movie-card:hover::before {
+            left: 100%;
+        }
+
+        .movie-placeholder {
+            text-align: center;
+            padding: 20px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .movie-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #9966cc;
+        }
+
+        .movie-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, #1a0f1a, #2d1b3d);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #d4af37;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #d4af37;
+        }
+
+        .video-container {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 60vh;
+        }
+
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-details {
+            color: #cccccc;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #9966cc, #663399);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(153, 102, 204, 0.4);
+        }
+
+        /* File input hidden */
+        #fileInput {
+            display: none;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(20px);
+        }
+
+        .upload-content {
+            text-align: center;
+            padding: 50px;
+            border: 3px dashed #d4af37;
+            border-radius: 20px;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #d4af37;
+        }
+
+        .upload-hint {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        /* Infinity Stones */
+        .infinity-stones {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+        }
+
+        .stone {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            animation: glow 2s ease-in-out infinite alternate;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .stone:nth-child(1) { color: #ff6b35; animation-delay: 0s; }
+        .stone:nth-child(2) { color: #4169e1; animation-delay: 0.3s; }
+        .stone:nth-child(3) { color: #32cd32; animation-delay: 0.6s; }
+        .stone:nth-child(4) { color: #ffd700; animation-delay: 0.9s; }
+        .stone:nth-child(5) { color: #9966cc; animation-delay: 1.2s; }
+        .stone:nth-child(6) { color: #ff1493; animation-delay: 1.5s; }
+
+        @keyframes glow {
+            from { 
+                box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+                opacity: 0.7;
+                transform: scale(1);
+            }
+            to { 
+                box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .hero {
+                padding-left: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn-primary, .btn-secondary {
+                padding: 12px 30px;
+            }
+            
+            .movie-card {
+                min-width: 220px;
+                height: 130px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">Inserte Nombre</div>
+        <nav class="nav">
+            <a href="#" class="nav-item">Inicio</a>
+            <a href="#" class="nav-item">Películas</a>
+            <a href="#" class="nav-item">Series</a>
+            <a href="#" class="nav-item">Mi Lista</a>
+            <div class="upload-btn" onclick="showUploadZone()">📁 Subir Video</div>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Mis Videos -->
+        <div class="section">
+            <br>
+            <h2 class="section-title">Mis Videos</h2>
+            <div class="movie-row" id="myVideos">
+            </br>
+                <div class="movie-card" onclick="showUploadZone()">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">📁</div>
+                        <div class="movie-title">Agregar Video</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recomendados -->
+        <div class="section">
+            <h2 class="section-title">Películas de Acción</h2>
+            <div class="movie-row">
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🎬</div>
+                        <div class="movie-title">Avengers Endgame</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">⚡</div>
+                        <div class="movie-title">Thor Ragnarok</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🕷️</div>
+                        <div class="movie-title">Spider-Man</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🦾</div>
+                        <div class="movie-title">Iron Man</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🛡️</div>
+                        <div class="movie-title">Captain America</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ciencia Ficción -->
+        <div class="section">
+            <h2 class="section-title">Ciencia Ficción</h2>
+            <div class="movie-row">
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🌌</div>
+                        <div class="movie-title">Guardians Galaxy</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🔮</div>
+                        <div class="movie-title">Doctor Strange</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🐜</div>
+                        <div class="movie-title">Ant-Man</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🖤</div>
+                        <div class="movie-title">Black Panther</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acción y Aventura -->
+        <div class="section">
+            <h2 class="section-title">Acción y Aventura</h2>
+            <div class="movie-row">
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🕷️</div>
+                        <div class="movie-title">Black Widow</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🏹</div>
+                        <div class="movie-title">Hawkeye</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">💚</div>
+                        <div class="movie-title">Hulk</div>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">❄️</div>
+                        <div class="movie-title">Winter Soldier</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Zone -->
+    <div class="upload-zone" id="uploadZone">
+        <div class="upload-content">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Arrastra tu video aquí</div>
+            <div class="upload-hint">O haz clic para seleccionar un archivo</div>
+            <input type="file" id="fileInput" accept="video/*">
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Reproduciendo Video</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="video-container">
+                <video id="videoPlayer" controls>
+                    Tu navegador no soporta la reproducción de video.
+                </video>
+            </div>
+            <div class="video-info">
+                <div class="video-details">
+                    <div id="videoFileName">Nombre del archivo</div>
+                    <div id="videoFileDetails">Detalles del archivo</div>
+                </div>
+                <div class="video-controls">
+                    <button class="control-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+                    <button class="control-btn" onclick="showUploadZone()">📁 Cambiar Video</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Infinity Stones -->
+    <div class="infinity-stones">
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadZone = document.getElementById('uploadZone');
+        const videoModal = document.getElementById('videoModal');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const myVideosRow = document.getElementById('myVideos');
+        
+        let userVideos = [];
+
+        // Upload zone functionality
+        function showUploadZone() {
+            uploadZone.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideUploadZone() {
+            uploadZone.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Click to select file
+        uploadZone.addEventListener('click', (e) => {
+            if (e.target === uploadZone || e.target.classList.contains('upload-content')) {
+                fileInput.click();
+            }
+        });
+
+        // Drag and drop
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('video/')) {
+                    loadVideo(file);
+                    hideUploadZone();
+                }
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                loadVideo(file);
+                hideUploadZone();
+            }
+        });
+
+        // Load video function
+        function loadVideo(file) {
+            const url = URL.createObjectURL(file);
+            const videoData = {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                url: url,
+                id: Date.now()
+            };
+            
+            userVideos.push(videoData);
+            updateMyVideos();
+            playVideo(videoData);
+        }
+
+        // Update my videos section
+        function updateMyVideos() {
+            // Clear existing videos except the upload button
+            const uploadCard = myVideosRow.querySelector('.movie-card');
+            myVideosRow.innerHTML = '';
+            myVideosRow.appendChild(uploadCard);
+
+            // Add user videos
+            userVideos.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => playVideo(video);
+                
+                card.innerHTML = `
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🎬</div>
+                        <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
+                    </div>
+                `;
+                
+                myVideosRow.appendChild(card);
+            });
+        }
+
+        // Play video
+        function playVideo(videoData) {
+            document.getElementById('modalTitle').textContent = videoData.name;
+            document.getElementById('videoFileName').textContent = videoData.name;
+            document.getElementById('videoFileDetails').textContent = 
+                `Tamaño: ${(videoData.size / (1024 * 1024)).toFixed(2)} MB | Tipo: ${videoData.type}`;
+            
+            videoPlayer.src = videoData.url;
+            videoModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            videoPlayer.play().catch(e => {
+                console.log('Autoplay bloqueado por el navegador');
+            });
+        }
+
+
+
+        // Close modal
+        function closeModal() {
+            videoModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            videoPlayer.pause();
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                videoPlayer.requestFullscreen().catch(err => {
+                    console.log(`Error al entrar en pantalla completa: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (videoModal.style.display === 'block') {
+                switch(e.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        if (videoPlayer.paused) {
+                            videoPlayer.play();
+                        } else {
+                            videoPlayer.pause();
+                        }
+                        break;
+                    case 'f':
+                    case 'F':
+                        toggleFullscreen();
+                        break;
+                    case 'ArrowLeft':
+                        videoPlayer.currentTime -= 10;
+                        break;
+                    case 'ArrowRight':
+                        videoPlayer.currentTime += 10;
+                        break;
+                }
+            } else if (uploadZone.style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    hideUploadZone();
+                }
+            }
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0,0,0,0.95)';
+            } else {
+                header.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.9), transparent)';
+            }
+        });
+    </script>
+</body>
+</html>
