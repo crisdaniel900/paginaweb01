@@ -487,6 +487,15 @@
         <!-- Mis Videos -->
         <div class="section">
             <br>
+            <div style="margin-bottom: 20px;">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Buscar en Mis Videos..." 
+                    style="width: 30%; padding: 10px 15px; border-radius: 10px; border: 1px solid #9966cc; font-size: 1rem;"
+                    oninput="filterMyVideos()"
+                >
+            </div>
             <h2 class="section-title">Mis Videos</h2>
             <div class="movie-row" id="myVideos">
             </br>
@@ -715,27 +724,28 @@
 
         // Update my videos section
         function updateMyVideos() {
-            // Clear existing videos except the upload button
-            const uploadCard = myVideosRow.querySelector('.movie-card');
-            myVideosRow.innerHTML = '';
-            myVideosRow.appendChild(uploadCard);
-
-            // Add user videos
-            userVideos.forEach(video => {
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.onclick = () => playVideo(video);
-                
-                card.innerHTML = `
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🎬</div>
-                        <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
-                    </div>
-                `;
-                
-                myVideosRow.appendChild(card);
-            });
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && searchInput.value) {
+        filterMyVideos();
+        return;
         }
+        const uploadCard = myVideosRow.querySelector('.movie-card');
+        myVideosRow.innerHTML = '';
+        if (uploadCard) myVideosRow.appendChild(uploadCard);
+
+        userVideos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.onclick = () => playVideo(video);
+        card.innerHTML = `
+            <div class="movie-placeholder">
+                <div class="movie-icon">🎬</div>
+                <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
+            </div>
+        `;
+        myVideosRow.appendChild(card);
+    });
+    }
 
         // Play video
         function playVideo(videoData) {
@@ -815,6 +825,29 @@
                 header.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.9), transparent)';
             }
         });
+
+        // Filter my videos
+        function filterMyVideos() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const uploadCard = myVideosRow.querySelector('.movie-card');
+            myVideosRow.innerHTML = '';
+            if (uploadCard) myVideosRow.appendChild(uploadCard);
+
+            userVideos
+                .filter(video => video.name.toLowerCase().includes(query))
+                .forEach(video => {
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    card.onclick = () => playVideo(video);
+                    card.innerHTML = `
+                        <div class="movie-placeholder">
+                            <div class="movie-icon">🎬</div>
+                            <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
+                        </div>
+                    `;
+                    myVideosRow.appendChild(card);
+                });
+        }
     </script>
 </body>
 </html>
