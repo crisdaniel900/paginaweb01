@@ -79,6 +79,25 @@
             box-shadow: 0 10px 30px rgba(153, 102, 204, 0.5);
         }
 
+        .search-bar {
+            margin-left: 30px;
+        }
+
+        .search-bar input {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            font-size: 1rem;
+            width: 220px;
+            background: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: #aaa;
+        }
+
         /* Hero Section */
         .hero {
             height: 100vh;
@@ -307,9 +326,13 @@
 
         .video-container {
             width: 100%;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
         }
 
         video {
@@ -474,31 +497,21 @@
             <a href="#" class="nav-item">Inicio</a>
             <a href="#" class="nav-item">Películas</a>
             <a href="#" class="nav-item">Series</a>
-            <a href="#" class="nav-item">Mi Lista</a>
+            <a href="#" class="nav-item">Anime</a>
+            <a href="#" class="nav-item">Video Adicional</a>
             <div class="upload-btn" onclick="showUploadZone()">📁 Subir Video</div>
         </nav>
+        <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Buscar videos..." />
+</div>
     </div>
 
-    <!-- Hero Section -->
-    
-
     <!-- Content -->
+     
     <div class="content">
-        <!-- Mis Videos -->
-        <div class="section">
-            <br>
-            <div style="margin-bottom: 20px;">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Buscar en Mis Videos..." 
-                    style="width: 30%; padding: 10px 15px; border-radius: 10px; border: 1px solid #9966cc; font-size: 1rem;"
-                    oninput="filterMyVideos()"
-                >
-            </div>
-            <h2 class="section-title">Mis Videos</h2>
-            <div class="movie-row" id="myVideos">
-            </br>
+        <!-- Tarjeta para agregar video -->
+        <div class="section" id="agregarVideoSection">
+            <div class="movie-row">
                 <div class="movie-card" onclick="showUploadZone()">
                     <div class="movie-placeholder">
                         <div class="movie-icon">📁</div>
@@ -507,114 +520,89 @@
                 </div>
             </div>
         </div>
+        
+        <!-- ====== APARTADO DE PELÍCULAS ====== -->
+<div class="section" id="peliculasSection">
+    <h2 class="section-title">Películas</h2>
+    <div class="movie-row" id="peliculasRow">
+        <!-- Aquí se mostrarán las películas subidas -->
+    </div>
+</div>
+<!-- ====== FIN APARTADO DE PELÍCULAS ====== -->
 
-        <!-- Recomendados -->
+        <!-- Series -->
         <div class="section">
-            <h2 class="section-title">Películas de Acción</h2>
-            <div class="movie-row">
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🎬</div>
-                        <div class="movie-title">Avengers Endgame</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">⚡</div>
-                        <div class="movie-title">Thor Ragnarok</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🕷️</div>
-                        <div class="movie-title">Spider-Man</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🦾</div>
-                        <div class="movie-title">Iron Man</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🛡️</div>
-                        <div class="movie-title">Captain America</div>
-                    </div>
-                </div>
-            </div>
+            <h2 class="section-title">Series</h2>
+            <div class="movie-row" id="seriesRow"></div>
         </div>
-
-        <!-- Ciencia Ficción -->
+        <!-- Anime -->
         <div class="section">
-            <h2 class="section-title">Ciencia Ficción</h2>
-            <div class="movie-row">
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🌌</div>
-                        <div class="movie-title">Guardians Galaxy</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🔮</div>
-                        <div class="movie-title">Doctor Strange</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🐜</div>
-                        <div class="movie-title">Ant-Man</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🖤</div>
-                        <div class="movie-title">Black Panther</div>
-                    </div>
-                </div>
-            </div>
+            <h2 class="section-title">Anime</h2>
+            <div class="movie-row" id="animeRow"></div>
         </div>
-
-        <!-- Acción y Aventura -->
+        <!-- Video Adicional -->
         <div class="section">
-            <h2 class="section-title">Acción y Aventura</h2>
-            <div class="movie-row">
-                <div class="movie-card">
+            <h2 class="section-title">Video Adicional</h2>
+            <div class="movie-row" id="adicionalRow"></div>
+        </div>
+        <!-- Videos de Internet -->
+        <div class="section">
+            <h2 class="section-title">Videos de Internet</h2>
+            <div class="movie-row" id="internetRow">
+                <div class="movie-card" onclick="showInternetForm()">
                     <div class="movie-placeholder">
-                        <div class="movie-icon">🕷️</div>
-                        <div class="movie-title">Black Widow</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">🏹</div>
-                        <div class="movie-title">Hawkeye</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">💚</div>
-                        <div class="movie-title">Hulk</div>
-                    </div>
-                </div>
-                <div class="movie-card">
-                    <div class="movie-placeholder">
-                        <div class="movie-icon">❄️</div>
-                        <div class="movie-title">Winter Soldier</div>
+                        <div class="movie-icon">🌐</div>
+                        <div class="movie-title">Agregar Video de Internet</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+     
+
     <!-- Upload Zone -->
     <div class="upload-zone" id="uploadZone">
         <div class="upload-content">
             <div class="upload-icon">📁</div>
-            <div class="upload-text">Arrastra tu video aquí</div>
-            <div class="upload-hint">O haz clic para seleccionar un archivo</div>
-            <input type="file" id="fileInput" accept="video/*">
+            <div class="upload-text">Agrega la ruta o URL de tu video local</div>
+            <input type="text" id="localVideoUrlInput" placeholder="Ejemplo: videos/mi_video.mp4 o C:/videos/mi_video.mp4" style="width:80%;padding:10px;border-radius:8px;">
+            <br><br>
+            <input type="text" id="localVideoTitleInput" placeholder="Título del video" style="width:80%;padding:10px;border-radius:8px;">
+            <br><br>
+            <select id="genreInput" style="padding:8px; border-radius:8px;">
+                <option value="">Selecciona Género</option>
+                <option value="Acción">Acción</option>
+                <option value="Ciencia Ficción">Ciencia Ficción</option>
+                <option value="Aventura">Aventura</option>
+                <option value="Comedia">Comedia</option>
+                <option value="Drama">Drama</option>
+                <option value="Otro">Otro</option>
+            </select>
+            <select id="typeInput" style="padding:8px; border-radius:8px; margin-left:10px;">
+                <option value="">Tipo</option>
+                <option value="Película">Película</option>
+                <option value="Serie">Serie</option>
+                <option value="Anime">Anime</option>
+                <option value="Video Adicional">Video Adicional</option>
+            </select>
+            <br><br>
+            <button class="control-btn" onclick="addLocalVideo()">Agregar</button>
+            <button class="control-btn" onclick="hideUploadZone()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Formulario para agregar video de internet -->
+    <div class="upload-zone" id="internetFormZone" style="display:none;">
+        <div class="upload-content">
+            <div class="upload-icon">🌐</div>
+            <div class="upload-text">Agrega un enlace de video (YouTube, Vimeo, etc.)</div>
+            <input type="text" id="internetUrlInput" placeholder="Pega el enlace aquí" style="width:80%;padding:10px;border-radius:8px;">
+            <br><br>
+            <input type="text" id="internetTitleInput" placeholder="Título del video" style="width:80%;padding:10px;border-radius:8px;">
+            <br><br>
+            <button class="control-btn" onclick="addInternetVideo()">Agregar</button>
+            <button class="control-btn" onclick="hideInternetForm()">Cancelar</button>
         </div>
     </div>
 
@@ -658,33 +646,56 @@
         const uploadZone = document.getElementById('uploadZone');
         const videoModal = document.getElementById('videoModal');
         const videoPlayer = document.getElementById('videoPlayer');
-        const myVideosRow = document.getElementById('myVideos');
-        
-        let userVideos = [];
+        const peliculasRow = document.getElementById('peliculasRow');
+        const seriesRow = document.getElementById('seriesRow');
+        const animeRow = document.getElementById('animeRow');
+        const adicionalRow = document.getElementById('adicionalRow');
+        const internetRow = document.getElementById('internetRow');
+        const internetFormZone = document.getElementById('internetFormZone');
 
-        // Upload zone functionality
+        let userVideos = [];
+        let internetVideos = [];
+
+        // Guardar y cargar videos locales
+function saveVideosToLocalStorage() {
+    localStorage.setItem('userVideos', JSON.stringify(userVideos));
+}
+function loadVideosFromLocalStorage() {
+    const saved = localStorage.getItem('userVideos');
+    if (saved) {
+        userVideos = JSON.parse(saved);
+        updateAllVideos();
+    }
+}
+
+// Guardar y cargar videos de internet
+function saveInternetVideosToLocalStorage() {
+    localStorage.setItem('internetVideos', JSON.stringify(internetVideos));
+}
+function loadInternetVideosFromLocalStorage() {
+    const saved = localStorage.getItem('internetVideos');
+    if (saved) {
+        internetVideos = JSON.parse(saved);
+        updateInternetVideos();
+    }
+}
+
         function showUploadZone() {
             uploadZone.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
         function hideUploadZone() {
             uploadZone.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-
-        // Click to select file
         uploadZone.addEventListener('click', (e) => {
             if (e.target === uploadZone || e.target.classList.contains('upload-content')) {
                 fileInput.click();
             }
         });
-
-        // Drag and drop
         uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
         });
-
         uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
             const files = e.dataTransfer.files;
@@ -696,8 +707,6 @@
                 }
             }
         });
-
-        // File input change
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -706,73 +715,89 @@
             }
         });
 
-        // Load video function
         function loadVideo(file) {
-            const url = URL.createObjectURL(file);
-            const videoData = {
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                url: url,
-                id: Date.now()
-            };
-            
-            userVideos.push(videoData);
-            updateMyVideos();
-            playVideo(videoData);
-        }
+            // Si el archivo está en una carpeta pública, puedes usar solo el nombre
+    // Ejemplo: "videos/" + file.name
+    const ruta = "videos/" + file.name; // Ajusta la carpeta según tu estructura
+    const genre = document.getElementById('genreInput').value || 'Sin género';
+    const type = document.getElementById('typeInput').value || 'Sin tipo';
+    const videoData = {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: ruta, // Guarda la ruta relativa
+        id: Date.now(),
+        genre: genre,
+        videoType: type
+    };
+    userVideos.push(videoData);
+    updateAllVideos();
+    saveVideosToLocalStorage(); // Guarda en LocalStorage
+    playVideo(videoData);
+}
 
-        // Update my videos section
-        function updateMyVideos() {
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput && searchInput.value) {
-        filterMyVideos();
-        return;
-        }
-        const uploadCard = myVideosRow.querySelector('.movie-card');
-        myVideosRow.innerHTML = '';
-        if (uploadCard) myVideosRow.appendChild(uploadCard);
+        function updateAllVideos() {
+            // Limpia todas las filas
+            peliculasRow.innerHTML = '';
+            seriesRow.innerHTML = '';
+            animeRow.innerHTML = '';
+            adicionalRow.innerHTML = '';
 
-        userVideos.forEach(video => {
-        const card = document.createElement('div');
-        card.className = 'movie-card';
-        card.onclick = () => playVideo(video);
-        card.innerHTML = `
-            <div class="movie-placeholder">
-                <div class="movie-icon">🎬</div>
-                <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
-            </div>
-        `;
-        myVideosRow.appendChild(card);
-    });
-    }
+            // Botón de agregar solo en Películas
+            const uploadCard = document.createElement('div');
+            uploadCard.className = 'movie-card';
+            uploadCard.onclick = showUploadZone;
+            uploadCard.innerHTML = `
+                <div class="movie-placeholder">
+                    <div class="movie-icon">📁</div>
+                    <div class="movie-title">Agregar Video</div>
+                </div>
+            `;
+            peliculasRow.appendChild(uploadCard);
 
-        // Play video
-        function playVideo(videoData) {
-            document.getElementById('modalTitle').textContent = videoData.name;
-            document.getElementById('videoFileName').textContent = videoData.name;
-            document.getElementById('videoFileDetails').textContent = 
-                `Tamaño: ${(videoData.size / (1024 * 1024)).toFixed(2)} MB | Tipo: ${videoData.type}`;
-            
-            videoPlayer.src = videoData.url;
-            videoModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            
-            videoPlayer.play().catch(e => {
-                console.log('Autoplay bloqueado por el navegador');
+            userVideos.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => playVideo(video);
+                card.innerHTML = `
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🎬</div>
+                        <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
+                        <div style="font-size:0.9rem; color:#9966cc;">${video.genre} | ${video.videoType}</div>
+                    </div>
+                `;
+                if (video.videoType === 'Película') {
+                    peliculasRow.appendChild(card);
+                } else if (video.videoType === 'Serie') {
+                    seriesRow.appendChild(card);
+                } else if (video.videoType === 'Anime') {
+                    animeRow.appendChild(card);
+                } else if (video.videoType === 'Video Adicional') {
+                    adicionalRow.appendChild(card);
+                }
             });
         }
 
+        function playVideo(videoData) {
+            document.getElementById('modalTitle').textContent = videoData.name;
+            document.getElementById('videoFileName').textContent = videoData.name;
+            document.getElementById('videoFileDetails').textContent =
+        `Tamaño: ${(videoData.size / (1024 * 1024)).toFixed(2)} MB | Tipo: ${videoData.type} | Género: ${videoData.genre} | ${videoData.videoType}`;
+    videoPlayer.src = videoData.url;
+    videoModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+        }
 
-
-        // Close modal
         function closeModal() {
             videoModal.style.display = 'none';
             document.body.style.overflow = 'auto';
-            videoPlayer.pause();
+            // Restaurar el reproductor local
+            document.querySelector('.video-container').innerHTML = `
+                <video id="videoPlayer" controls>
+                    Tu navegador no soporta la reproducción de video.
+                </video>
+            `;
         }
-
-        // Toggle fullscreen
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 videoPlayer.requestFullscreen().catch(err => {
@@ -782,8 +807,6 @@
                 document.exitFullscreen();
             }
         }
-
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (videoModal.style.display === 'block') {
                 switch(e.key) {
@@ -815,8 +838,6 @@
                 }
             }
         });
-
-        // Header scroll effect
         window.addEventListener('scroll', () => {
             const header = document.querySelector('.header');
             if (window.scrollY > 100) {
@@ -826,28 +847,94 @@
             }
         });
 
-        // Filter my videos
-        function filterMyVideos() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const uploadCard = myVideosRow.querySelector('.movie-card');
-            myVideosRow.innerHTML = '';
-            if (uploadCard) myVideosRow.appendChild(uploadCard);
-
-            userVideos
-                .filter(video => video.name.toLowerCase().includes(query))
-                .forEach(video => {
-                    const card = document.createElement('div');
-                    card.className = 'movie-card';
-                    card.onclick = () => playVideo(video);
-                    card.innerHTML = `
-                        <div class="movie-placeholder">
-                            <div class="movie-icon">🎬</div>
-                            <div class="movie-title">${video.name.length > 20 ? video.name.substring(0, 20) + '...' : video.name}</div>
-                        </div>
-                    `;
-                    myVideosRow.appendChild(card);
-                });
+        function showInternetForm() {
+            internetFormZone.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
+        function hideInternetForm() {
+            internetFormZone.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('internetUrlInput').value = '';
+            document.getElementById('internetTitleInput').value = '';
+        }
+
+        function addInternetVideo() {
+            const url = document.getElementById('internetUrlInput').value.trim();
+            const title = document.getElementById('internetTitleInput').value.trim() || 'Video de Internet';
+            if (!url) return;
+            internetVideos.push({ url, title });
+            updateInternetVideos();
+            saveInternetVideosToLocalStorage();
+            hideInternetForm();
+        }
+
+        function updateInternetVideos() {
+            // Mantén el botón de agregar
+            internetRow.innerHTML = `
+                <div class="movie-card" onclick="showInternetForm()">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🌐</div>
+                        <div class="movie-title">Agregar Video de Internet</div>
+                    </div>
+                </div>
+            `;
+            internetVideos.forEach((video, idx) => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => playInternetVideo(idx);
+                card.innerHTML = `
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">▶️</div>
+                        <div class="movie-title">${video.title.length > 20 ? video.title.substring(0, 20) + '...' : video.title}</div>
+                    </div>
+                `;
+                internetRow.appendChild(card);
+            });
+        }
+
+        function playInternetVideo(idx) {
+            const video = internetVideos[idx];
+            document.getElementById('modalTitle').textContent = video.title;
+            document.getElementById('videoFileName').textContent = video.title;
+            document.getElementById('videoFileDetails').textContent = `Fuente: Internet`;
+            let embedHtml = '';
+            if (video.url.includes('youtube.com') || video.url.includes('youtu.be')) {
+                let videoId = '';
+                if (video.url.includes('youtu.be/')) {
+                    videoId = video.url.split('youtu.be/')[1].split(/[?&]/)[0];
+                } else {
+                    const urlParams = new URLSearchParams(video.url.split('?')[1]);
+                    videoId = urlParams.get('v');
+                }
+                embedHtml = `<iframe width="100%" height="400" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+            } else if (video.url.includes('vimeo.com')) {
+                const matches = video.url.match(/vimeo\.com\/(\d+)/);
+                if (matches) {
+                    embedHtml = `<iframe src="https://player.vimeo.com/video/${matches[1]}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
+                }
+            } else if (video.url.includes('tiktok.com')) {
+                // Extrae el ID del video de TikTok
+                const match = video.url.match(/\/video\/(\d+)/);
+                if (match) {
+                    const videoId = match[1];
+                    embedHtml = `<iframe style="max-width:100%;height:400px;" src="https://www.tiktok.com/embed/v2/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                } else {
+                    // Si no se encuentra el ID, intenta incrustar el enlace directamente
+                    embedHtml = `<iframe style="max-width:100%;height:400px;" src="${video.url.replace('www.', '')}" frameborder="0" allowfullscreen></iframe>`;
+                }
+            } else {
+                embedHtml = `<video width="100%" height="400" controls src="${video.url}"></video>`;
+            }
+            document.querySelector('.video-container').innerHTML = embedHtml;
+            videoModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Al cargar la página
+window.onload = function() {
+    loadVideosFromLocalStorage();
+    loadInternetVideosFromLocalStorage();
+};
     </script>
 </body>
 </html>
