@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Video</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0f1a 50%, #0a0a0a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            backdrop-filter: blur(10px);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #b8860b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-item {
+            color: #cccccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #9966cc, #663399);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(153, 102, 204, 0.3);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(153, 102, 204, 0.5);
+        }
+
+        .search-bar input {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            font-size: 1rem;
+            width: 220px;
+            background: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: #aaa;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 50px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #cccccc;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 15px 40px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+
+        .content {
+            padding: 50px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .movie-row {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #9966cc transparent;
+        }
+
+        .movie-row::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .movie-row::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .movie-row::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #9966cc, #d4af37);
+            border-radius: 10px;
+        }
+
+        .movie-card {
+            min-width: 280px;
+            height: 160px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #2d1b3d, #1a0f1a);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05) translateY(-10px);
+            border-color: #d4af37;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .movie-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .movie-card:hover::before {
+            left: 100%;
+        }
+
+        .movie-placeholder {
+            text-align: center;
+            padding: 20px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .movie-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #9966cc;
+        }
+
+        .movie-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .upload-zone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(20px);
+        }
+
+        .upload-content {
+            text-align: center;
+            padding: 50px;
+            border: 3px dashed #d4af37;
+            border-radius: 20px;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #d4af37;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #333;
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .form-input::placeholder {
+            color: #aaa;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #9966cc, #663399);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            font-size: 1rem;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(153, 102, 204, 0.4);
+        }
+
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a0f1a, #2d1b3d);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 90vw;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #d4af37;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #d4af37;
+        }
+
+        .video-container {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            border-radius: 12px;
+        }
+
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-details {
+            color: #cccccc;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .delete-btn {
+            margin-top: 10px;
+            padding: 5px 12px;
+            border-radius: 12px;
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ff6666;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .success-message {
+            color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .infinity-stones {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+        }
+
+        .stone {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            animation: glow 2s ease-in-out infinite alternate;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .stone:nth-child(1) { color: #ff6b35; animation-delay: 0s; }
+        .stone:nth-child(2) { color: #4169e1; animation-delay: 0.3s; }
+        .stone:nth-child(3) { color: #32cd32; animation-delay: 0.6s; }
+        .stone:nth-child(4) { color: #ffd700; animation-delay: 0.9s; }
+        .stone:nth-child(5) { color: #9966cc; animation-delay: 1.2s; }
+        .stone:nth-child(6) { color: #ff1493; animation-delay: 1.5s; }
+
+        @keyframes glow {
+            from { 
+                box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+                opacity: 0.7;
+                transform: scale(1);
+            }
+            to { 
+                box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .hero {
+                padding-left: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .movie-card {
+                min-width: 220px;
+                height: 130px;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">VideoStream</div>
+        <nav class="nav">
+            <a href="#" class="nav-item">Inicio</a>
+            <a href="#peliculasSection" class="nav-item">Películas</a>
+            <a href="#seriesSection" class="nav-item">Series</a>
+            <a href="#animeSection" class="nav-item">Anime</a>
+            <a href="#adicionalSection" class="nav-item">Videos</a>
+            <div class="upload-btn" onclick="showUploadZone()">📁 Subir Video</div>
+        </nav>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar videos..." />
+        </div>
+    </div>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Tu Plataforma de Video</h1>
+            <p class="hero-description">Sube y reproduce tus videos favoritos. Una experiencia de streaming única y personalizada.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="showUploadZone()">Comenzar Ahora</button>
+                <button class="btn-secondary" onclick="document.querySelector('.content').scrollIntoView()">Explorar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="section">
+            <div class="movie-row">
+                <div class="movie-card" onclick="showUploadZone()">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">📁</div>
+                        <div class="movie-title">Agregar Video Local</div>
+                    </div>
+                </div>
+                <div class="movie-card" onclick="showInternetForm()">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🌐</div>
+                        <div class="movie-title">Video de Internet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="peliculasSection">
+            <h2 class="section-title">Películas</h2>
+            <div class="movie-row" id="peliculasRow"></div>
+        </div>
+
+        <div class="section" id="seriesSection">
+            <h2 class="section-title">Series</h2>
+            <div class="movie-row" id="seriesRow"></div>
+        </div>
+        
+        <div class="section" id="animeSection">
+            <h2 class="section-title">Anime</h2>
+            <div class="movie-row" id="animeRow"></div>
+        </div>
+        
+        <div class="section" id="adicionalSection">
+            <h2 class="section-title">Videos Adicionales</h2>
+            <div class="movie-row" id="adicionalRow"></div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Videos de Internet</h2>
+            <div class="movie-row" id="internetRow">
+                <div class="movie-card" onclick="showInternetForm()">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🌐</div>
+                        <div class="movie-title">Agregar de Internet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Zone para archivos locales -->
+    <div class="upload-zone" id="uploadZone">
+        <div class="upload-content">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Seleccionar Video Local</div>
+            
+            <div id="messageContainer"></div>
+            
+            <input type="text" class="form-input" id="localVideoTitleInput" placeholder="Título del video (opcional)">
+            
+            <div class="form-row">
+                <select id="genreInput" class="form-input">
+                    <option value="">Seleccionar Género</option>
+                    <option value="Acción">Acción</option>
+                    <option value="Aventura">Aventura</option>
+                    <option value="Comedia">Comedia</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Terror">Terror</option>
+                    <option value="Ciencia Ficción">Ciencia Ficción</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Documental">Documental</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                
+                <select id="typeInput" class="form-input">
+                    <option value="">Seleccionar Tipo</option>
+                    <option value="Película">Película</option>
+                    <option value="Serie">Serie</option>
+                    <option value="Anime">Anime</option>
+                    <option value="Video Adicional">Video Adicional</option>
+                </select>
+            </div>
+            
+            <button class="control-btn" onclick="document.getElementById('fileInput').click()">📁 Seleccionar Archivo</button>
+            <button class="control-btn" onclick="hideUploadZone()">❌ Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Upload Zone para videos de internet -->
+    <div class="upload-zone" id="internetFormZone">
+        <div class="upload-content">
+            <div class="upload-icon">🌐</div>
+            <div class="upload-text">Agregar Video de Internet</div>
+            
+            <div id="internetMessageContainer"></div>
+            
+            <input type="text" class="form-input" id="internetUrlInput" placeholder="URL del video (YouTube, Vimeo, etc.)">
+            <input type="text" class="form-input" id="internetTitleInput" placeholder="Título del video">
+            
+            <button class="control-btn" onclick="addInternetVideo()">🌐 Agregar Video</button>
+            <button class="control-btn" onclick="hideInternetForm()">❌ Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal para reproducir videos -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Reproduciendo Video</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="video-container" id="videoContainer">
+                <video id="videoPlayer" controls>
+                    Tu navegador no soporta la reproducción de video.
+                </video>
+            </div>
+            <div class="video-info">
+                <div class="video-details">
+                    <div id="videoFileName">Nombre del archivo</div>
+                    <div id="videoFileDetails">Detalles del archivo</div>
+                </div>
+                <div class="video-controls">
+                    <button class="control-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+                    <button class="control-btn" onclick="downloadVideo()">💾 Descargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Infinity Stones -->
+    <div class="infinity-stones">
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+        <div class="stone"></div>
+    </div>
+
+    <input type="file" id="fileInput" accept="video/*" style="display:none;">
+
+    <script>
+        // Variables globales
+        const fileInput = document.getElementById('fileInput');
+        const uploadZone = document.getElementById('uploadZone');
+        const internetFormZone = document.getElementById('internetFormZone');
+        const videoModal = document.getElementById('videoModal');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoContainer = document.getElementById('videoContainer');
+        
+        // Referencias a las filas de contenido
+        const peliculasRow = document.getElementById('peliculasRow');
+        const seriesRow = document.getElementById('seriesRow');
+        const animeRow = document.getElementById('animeRow');
+        const adicionalRow = document.getElementById('adicionalRow');
+        const internetRow = document.getElementById('internetRow');
+
+        // Arrays para almacenar videos (usando memoria en lugar de localStorage)
+        let userVideos = [];
+        let internetVideos = [];
+        let currentVideoData = null;
+
+        // Función para mostrar mensajes
+        function showMessage(message, type = 'info', containerId = 'messageContainer') {
+            const container = document.getElementById(containerId);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            messageDiv.textContent = message;
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (container.contains(messageDiv)) {
+                    container.removeChild(messageDiv);
+                }
+            }, 5000);
+        }
+
+        // Funciones para mostrar/ocultar zonas de carga
+        function showUploadZone() {
+            uploadZone.style.display = 'flex';
+            internetFormZone.style.display = 'none';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideUploadZone() {
+            uploadZone.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            clearUploadForm();
+        }
+
+        function showInternetForm() {
+            internetFormZone.style.display = 'flex';
+            uploadZone.style.display = 'none';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideInternetForm() {
+            internetFormZone.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            clearInternetForm();
+        }
+
+        function clearUploadForm() {
+            document.getElementById('localVideoTitleInput').value = '';
+            document.getElementById('genreInput').value = '';
+            document.getElementById('typeInput').value = '';
+            document.getElementById('messageContainer').innerHTML = '';
+        }
+
+        function clearInternetForm() {
+            document.getElementById('internetUrlInput').value = '';
+            document.getElementById('internetTitleInput').value = '';
+            document.getElementById('internetMessageContainer').innerHTML = '';
+        }
+
+        // Manejo de archivos
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('video/')) {
+                showMessage('Por favor selecciona un archivo de video válido', 'error');
+                return;
+            }
+
+            // Validar tamaño (100MB máximo para mejor rendimiento)
+            const maxSize = 100 * 1024 * 1024; // 100MB
+            if (file.size > maxSize) {
+                showMessage('El archivo es muy grande. Máximo permitido: 100MB', 'error');
+                return;
+            }
+
+            loadLocalVideo(file);
+        }
+
+        function loadLocalVideo(file) {
+            const title = document.getElementById('localVideoTitleInput').value.trim() || file.name;
+            const genre = document.getElementById('genreInput').value || 'Sin clasificar';
+            const type = document.getElementById('typeInput').value || 'Video Adicional';
+
+            // Crear URL del objeto para reproducción
+            const videoUrl = URL.createObjectURL(file);
+
+            const videoData = {
+                id: Date.now(),
+                name: title,
+                originalName: file.name,
+                size: file.size,
+                type: file.type,
+                url: videoUrl,
+                genre: genre,
+                videoType: type,
+                isLocal: true,
+                file: file // Mantener referencia al archivo
+            };
+
+            userVideos.push(videoData);
+            updateAllVideos();
+            showMessage('Video agregado exitosamente', 'success');
+            
+            setTimeout(() => {
+                hideUploadZone();
+            }, 1500);
+
+            console.log('Video local cargado:', videoData);
+        }
+
+        function addInternetVideo() {
+            const url = document.getElementById('internetUrlInput').value.trim();
+            const title = document.getElementById('internetTitleInput').value.trim();
+
+            if (!url) {
+                showMessage('Por favor ingresa una URL', 'error', 'internetMessageContainer');
+                return;
+            }
+
+            if (!title) {
+                showMessage('Por favor ingresa un título', 'error', 'internetMessageContainer');
+                return;
+            }
+
+            // Validar que sea una URL válida
+            try {
+                new URL(url);
+            } catch (e) {
+                showMessage('Por favor ingresa una URL válida', 'error', 'internetMessageContainer');
+                return;
+            }
+
+            const videoData = {
+                id: Date.now(),
+                title: title,
+                url: url,
+                isInternet: true
+            };
+
+            internetVideos.push(videoData);
+            updateInternetVideos();
+            showMessage('Video de internet agregado exitosamente', 'success', 'internetMessageContainer');
+            
+            setTimeout(() => {
+                hideInternetForm();
+            }, 1500);
+
+            console.log('Video de internet agregado:', videoData);
+        }
+
+        // Actualizar visualización de videos
+        function updateAllVideos() {
+            // Limpiar todas las filas
+            peliculasRow.innerHTML = '';
+            seriesRow.innerHTML = '';
+            animeRow.innerHTML = '';
+            adicionalRow.innerHTML = '';
+
+            userVideos.forEach((video, index) => {
+                const card = createVideoCard(video, index);
+                
+                switch(video.videoType) {
+                    case 'Película':
+                        peliculasRow.appendChild(card);
+                        break;
+                    case 'Serie':
+                        seriesRow.appendChild(card);
+                        break;
+                    case 'Anime':
+                        animeRow.appendChild(card);
+                        break;
+                    case 'Video Adicional':
+                        adicionalRow.appendChild(card);
+                        break;
+                    default:
+                        adicionalRow.appendChild(card);
+                }
+            });
+        }
+
+        function createVideoCard(video, index) {
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            
+            const displayTitle = video.name && video.name.length > 20 ? 
+                video.name.substring(0, 20) + '...' : (video.name || 'Video sin título');
+            
+            card.innerHTML = `
+                <div class="movie-placeholder">
+                    <div class="movie-icon">🎬</div>
+                    <div class="movie-title">${displayTitle}</div>
+                    <div style="font-size:0.8rem; color:#9966cc; margin-top:5px;">
+                        ${video.genre} | ${video.videoType}
+                    </div>
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVideo(${index})">
+                        🗑️ Eliminar
+                    </button>
+                </div>
+            `;
+            
+            card.onclick = () => playVideo(video);
+            return card;
+        }
+
+        function updateInternetVideos() {
+            // Mantener botón de agregar
+            internetRow.innerHTML = `
+                <div class="movie-card" onclick="showInternetForm()">
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">🌐</div>
+                        <div class="movie-title">Agregar de Internet</div>
+                    </div>
+                </div>
+            `;
+
+            internetVideos.forEach((video, index) => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                
+                const displayTitle = video.title && video.title.length > 20 ? 
+                    video.title.substring(0, 20) + '...' : (video.title || 'Video sin título');
+                
+                card.innerHTML = `
+                    <div class="movie-placeholder">
+                        <div class="movie-icon">▶️</div>
+                        <div class="movie-title">${displayTitle}</div>
+                        <div style="font-size:0.8rem; color:#9966cc; margin-top:5px;">Internet</div>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteInternetVideo(${index})">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                `;
+                
+                card.onclick = () => playInternetVideo(video);
+                internetRow.appendChild(card);
+            });
+        }
+
+        // Funciones para eliminar videos
+        function deleteVideo(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar este video?')) {
+                // Liberar URL del objeto si existe
+                if (userVideos[index] && userVideos[index].url && userVideos[index].isLocal) {
+                    URL.revokeObjectURL(userVideos[index].url);
+                }
+                userVideos.splice(index, 1);
+                updateAllVideos();
+            }
+        }
+
+        function deleteInternetVideo(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar este video?')) {
+                internetVideos.splice(index, 1);
+                updateInternetVideos();
+            }
+        }
+
+        // Reproducir videos locales
+        function playVideo(videoData) {
+            currentVideoData = videoData;
+            
+            document.getElementById('modalTitle').textContent = videoData.name || 'Video sin título';
+            document.getElementById('videoFileName').textContent = videoData.name || videoData.originalName || 'Video';
+            
+            const sizeInMB = videoData.size ? (videoData.size / (1024 * 1024)).toFixed(2) + ' MB' : 'Desconocido';
+            document.getElementById('videoFileDetails').textContent = 
+                `Tamaño: ${sizeInMB} | Género: ${videoData.genre} | Tipo: ${videoData.videoType}`;
+
+            // Configurar reproductor
+            videoContainer.innerHTML = `
+                <video id="videoPlayer" controls style="width:100%; max-height:500px; border-radius:12px;">
+                    <source src="${videoData.url}" type="${videoData.type || 'video/mp4'}">
+                    Tu navegador no soporta la reproducción de este video.
+                </video>
+            `;
+
+            const newVideoPlayer = document.getElementById('videoPlayer');
+            
+            // Manejar errores de carga
+            newVideoPlayer.onerror = function(e) {
+                console.error('Error al cargar el video:', e);
+                videoContainer.innerHTML = `
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:400px;color:#ff6b6b;">
+                        <div style="font-size:3rem;margin-bottom:20px;">⚠️</div>
+                        <div style="font-size:1.2rem;text-align:center;">Error al cargar el video</div>
+                        <div style="font-size:1rem;text-align:center;margin-top:10px;color:#aaa;">
+                            Verifica que el archivo sea válido y esté en un formato soportado
+                        </div>
+                        <button class="control-btn" onclick="closeModal()" style="margin-top:20px;">Cerrar</button>
+                    </div>
+                `;
+            };
+
+            newVideoPlayer.onloadeddata = function() {
+                console.log('Video cargado correctamente');
+            };
+
+            // Mostrar modal
+            videoModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Reproducir videos de internet
+        function playInternetVideo(videoData) {
+            currentVideoData = videoData;
+            
+            document.getElementById('modalTitle').textContent = videoData.title || 'Video de Internet';
+            document.getElementById('videoFileName').textContent = videoData.title || 'Video de Internet';
+            document.getElementById('videoFileDetails').textContent = 'Fuente: Internet';
+
+            let embedHtml = '';
+            
+            try {
+                const url = videoData.url.toLowerCase();
+                
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    let videoId = '';
+                    if (url.includes('youtu.be/')) {
+                        videoId = videoData.url.split('youtu.be/')[1].split(/[?&]/)[0];
+                    } else if (url.includes('watch?v=')) {
+                        const urlParams = new URLSearchParams(videoData.url.split('?')[1]);
+                        videoId = urlParams.get('v');
+                    }
+                    
+                    if (videoId) {
+                        embedHtml = `
+                            <iframe 
+                                width="100%" 
+                                height="400" 
+                                src="https://www.youtube.com/embed/${videoId}" 
+                                frameborder="0" 
+                                allowfullscreen
+                                style="border-radius:12px;">
+                            </iframe>
+                        `;
+                    }
+                } else if (url.includes('vimeo.com')) {
+                    const matches = videoData.url.match(/vimeo\.com\/(\d+)/);
+                    if (matches) {
+                        embedHtml = `
+                            <iframe 
+                                src="https://player.vimeo.com/video/${matches[1]}" 
+                                width="100%" 
+                                height="400" 
+                                frameborder="0" 
+                                allowfullscreen
+                                style="border-radius:12px;">
+                            </iframe>
+                        `;
+                    }
+                } else if (url.includes('dailymotion.com')) {
+                    const matches = videoData.url.match(/dailymotion\.com\/video\/([^_]+)/);
+                    if (matches) {
+                        embedHtml = `
+                            <iframe 
+                                src="https://www.dailymotion.com/embed/video/${matches[1]}" 
+                                width="100%" 
+                                height="400" 
+                                frameborder="0" 
+                                allowfullscreen
+                                style="border-radius:12px;">
+                            </iframe>
+                        `;
+                    }
+                } else {
+                    // Para otros videos o URLs directas de video
+                    embedHtml = `
+                        <video controls style="width:100%; max-height:400px; border-radius:12px;">
+                            <source src="${videoData.url}" type="video/mp4">
+                            Tu navegador no soporta la reproducción de este video.
+                        </video>
+                    `;
+                }
+
+                // Si no se pudo generar embed, mostrar error
+                if (!embedHtml.trim()) {
+                    throw new Error('URL no soportada');
+                }
+                
+            } catch (error) {
+                embedHtml = `
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:400px;color:#ff6b6b;">
+                        <div style="font-size:3rem;margin-bottom:20px;">⚠️</div>
+                        <div style="font-size:1.2rem;text-align:center;">URL no compatible</div>
+                        <div style="font-size:1rem;text-align:center;margin-top:10px;color:#aaa;">
+                            Esta URL no es compatible con la reproducción integrada
+                        </div>
+                        <button class="control-btn" onclick="window.open('${videoData.url}', '_blank')" style="margin-top:20px;">
+                            🔗 Abrir en nueva ventana
+                        </button>
+                        <button class="control-btn" onclick="closeModal()" style="margin-top:10px;">Cerrar</button>
+                    </div>
+                `;
+            }
+
+            videoContainer.innerHTML = embedHtml;
+            videoModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            videoModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Limpiar contenedor
+            videoContainer.innerHTML = `
+                <video id="videoPlayer" controls>
+                    Tu navegador no soporta la reproducción de video.
+                </video>
+            `;
+            
+            currentVideoData = null;
+        }
+
+        // Pantalla completa
+        function toggleFullscreen() {
+            const videoElement = document.querySelector('#videoPlayer');
+            if (videoElement) {
+                if (!document.fullscreenElement) {
+                    videoElement.requestFullscreen().catch(err => {
+                        console.log('Error al entrar en pantalla completa:', err);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Descargar video (solo para videos locales)
+        function downloadVideo() {
+            if (currentVideoData && currentVideoData.isLocal && currentVideoData.file) {
+                const url = URL.createObjectURL(currentVideoData.file);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentVideoData.originalName || 'video.mp4';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } else {
+                alert('La descarga solo está disponible para videos locales');
+            }
+        }
+
+        // Funcionalidad de búsqueda
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            searchVideos(searchTerm);
+        });
+
+        function searchVideos(searchTerm) {
+            const allCards = document.querySelectorAll('.movie-card');
+            
+            allCards.forEach(card => {
+                const title = card.querySelector('.movie-title');
+                if (title) {
+                    const titleText = title.textContent.toLowerCase();
+                    const shouldShow = titleText.includes(searchTerm) || searchTerm === '';
+                    card.style.display = shouldShow ? 'flex' : 'none';
+                }
+            });
+        }
+
+        // Event listeners para arrastrar y soltar
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = '#ffd700';
+        });
+
+        uploadZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = '#d4af37';
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = '#d4af37';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('video/')) {
+                    // Simular la selección del archivo
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    fileInput.files = dt.files;
+                    
+                    // Disparar evento de cambio
+                    const event = new Event('change', { bubbles: true });
+                    fileInput.dispatchEvent(event);
+                } else {
+                    showMessage('Por favor arrastra solo archivos de video', 'error');
+                }
+            }
+        });
+
+        // Controles de teclado
+        document.addEventListener('keydown', (e) => {
+            if (videoModal.style.display === 'flex') {
+                switch(e.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        const video = document.querySelector('#videoPlayer');
+                        if (video) {
+                            if (video.paused) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                        }
+                        break;
+                    case 'f':
+                    case 'F':
+                        toggleFullscreen();
+                        break;
+                    case 'ArrowLeft':
+                        const videoLeft = document.querySelector('#videoPlayer');
+                        if (videoLeft) videoLeft.currentTime -= 10;
+                        break;
+                    case 'ArrowRight':
+                        const videoRight = document.querySelector('#videoPlayer');
+                        if (videoRight) videoRight.currentTime += 10;
+                        break;
+                }
+            } else if (uploadZone.style.display === 'flex' || internetFormZone.style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    hideUploadZone();
+                    hideInternetForm();
+                }
+            }
+        });
+
+        // Efecto de scroll en header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0,0,0,0.95)';
+                header.style.backdropFilter = 'blur(20px)';
+            } else {
+                header.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.9), transparent)';
+                header.style.backdropFilter = 'blur(10px)';
+            }
+        });
+
+        // Navegación suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Inicialización al cargar la página
+        window.addEventListener('load', function() {
+            console.log('Plataforma de video iniciada');
+            updateAllVideos();
+            updateInternetVideos();
+        });
+
+        // Limpiar URLs de objeto al cerrar la página
+        window.addEventListener('beforeunload', function() {
+            userVideos.forEach(video => {
+                if (video.isLocal && video.url) {
+                    URL.revokeObjectURL(video.url);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+            //
